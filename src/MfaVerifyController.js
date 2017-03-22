@@ -22,10 +22,12 @@ define([
   'views/mfa-verify/CallAndSMSForm',
   'views/mfa-verify/PushForm',
   'views/mfa-verify/InlineTOTPForm',
-  'views/shared/FooterSignout'
+  'views/shared/FooterSignout',
+  'views/mfa-verify/BluetoothForm',
+  'views/mfa-verify/BluetoothInline',
 ],
 function (Okta, Checkbox, BaseLoginController, CookieUtil, TOTPForm, YubikeyForm, SecurityQuestionForm, CallAndSMSForm,
-          PushForm, InlineTOTPForm, FooterSignout) {
+          PushForm, InlineTOTPForm, FooterSignout, BluetoothForm, BluetoothInline) {
 
   return BaseLoginController.extend({
     className: 'mfa-verify',
@@ -34,6 +36,7 @@ function (Okta, Checkbox, BaseLoginController, CookieUtil, TOTPForm, YubikeyForm
       var factors = options.appState.get('factors');
       var factorType = options.factorType;
       var provider = options.provider;
+      var forHackathon = factorType === 'token:software:totp' && provider === 'GOOGLE';
 
       var View;
       switch (factorType) {
@@ -57,7 +60,6 @@ function (Okta, Checkbox, BaseLoginController, CookieUtil, TOTPForm, YubikeyForm
       default:
         throw new Error('Unrecognized factor type');
       }
-
       this.model = factors.findWhere({ provider: provider, factorType: factorType });
       if (!this.model) {
         // TODO: recover from this more gracefully - probably to redirect
@@ -66,7 +68,14 @@ function (Okta, Checkbox, BaseLoginController, CookieUtil, TOTPForm, YubikeyForm
       }
 
       this.addListeners();
-      this.add(new View(this.toJSON()));
+      if (forHackathon) {
+        this.add(new BluetoothForm(this.toJSON()));
+        this.add(BluetoothInline, {
+          options: { model: this.model }
+        });
+      } else {
+        this.add(new View(this.toJSON()));
+      }
 
       // Okta Push is different from the other factors - it has a backup
       // totp factor that can be chosen with the InlineTOTPForm
