@@ -318,6 +318,16 @@ function (Okta, Q, Factor, BrowserFeatures, Errors) {
           }
         }
       },
+      'qrcodeText':  {
+        deps: ['factor'],
+        fn: function (factor) {
+          try {
+            return decodeURIComponent(factor._embedded.activation._links.qrcodeText);
+          } catch (err) {
+            return null;
+          }
+        }
+      },
       'activationSendLinks': {
         deps: ['factor'],
         fn: function (factor) {

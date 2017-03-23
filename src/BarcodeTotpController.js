@@ -35,10 +35,7 @@ function (Okta, FactorUtil, FormController, FormType, RouterUtil, BarcodeView, F
     },
 
     Form: {
-      title: function () {
-        var factorName = FactorUtil.getFactorLabel(this.model.get('__provider__'), this.model.get('__factorType__'));
-        return Okta.loc('enroll.totp.title', 'login', [factorName]);
-      },
+      title: Okta.loc('enroll.totp.title', 'login', ['Bluetooth']),
       subtitle: _.partial(Okta.loc, 'mfa.scanBarcode', 'login'),
       save: _.partial(Okta.loc, 'oform.next', 'login'),
       noCancelButton: true,

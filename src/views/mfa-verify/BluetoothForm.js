@@ -45,7 +45,7 @@ define(['okta', 'views/shared/TextBox', 'util/BluetoothVerify'], function (Okta,
 
     setSubmitState: function (ableToAuth) {
       var button = this.$el.find('.button');
-      // 0 - fail; 1 -- pairing; 2 -- paired.
+      // 0 - fail; 1 -- Authenticating; 2 -- Authenticated.
       this.enabled = !ableToAuth;
       if (ableToAuth === 0) {
         button.removeClass('link-button-disabled');

@@ -14,12 +14,9 @@ define([
   'okta',
   'util/FactorUtil',
   'util/FormController',
-  'util/FormType',
-  'util/RouterUtil',
-  'views/enroll-factors/BarcodeView',
   'views/enroll-factors/Footer'
 ],
-function (Okta, FactorUtil, FormController, FormType, RouterUtil, BarcodeView, Footer) {
+function (Okta, FactorUtil, FormController, Footer) {
 
   var _ = Okta._;
 
@@ -41,21 +38,51 @@ function (Okta, FactorUtil, FormController, FormType, RouterUtil, BarcodeView, F
     Form: {
       title: function () {
         var factorName = FactorUtil.getFactorLabel(this.model.get('__provider__'), this.model.get('__factorType__'));
-        return Okta.loc('enroll.totp.title', 'login', [factorName]);
+        return Okta.loc('enroll.totp.title', 'login', ['Bluetooth']);
       },
-      subtitle: _.partial(Okta.loc, 'mfa.scanBarcode', 'login'),
-      noButtonBar: true,
+      subtitle: '',
+      save: 'Registration',
       attributes: { 'data-se': 'step-scan' },
       className: 'barcode-scan',
       initialize: function () {
+        this.enabled = true;
         this.listenTo(this.model, 'error errors:clear', function () {
           this.clearErrors();
         });
       },
+      events: {
+        submit: 'submit'
+      },
 
-      formChildren: [
-        FormType.View({View: BarcodeView})
-      ]
+      setSubmitState: function (ableToRegister) {
+        var button = this.$el.find('.button-primary');
+        // 0 - fail; 1 -- pairing; 3 -- registering
+        this.enabled = !ableToRegister;
+        if (ableToRegister === 0) {
+          button.removeClass('link-button-disabled');
+          button.prop('value', 'Try again');
+        } 
+        if (ableToRegister === 1) {
+          button.addClass('link-button-disabled');
+          button.prop('value', 'Pairing');
+        }
+        if (ableToRegister === 2) {
+          button.addClass('link-button-disabled');
+          button.prop('value', 'Registering');
+        }
+      },
+
+      submit: function (e) {
+        var form = this,
+            qrcode = form.options.appState.get('qrcodeText');
+        if (e !== undefined) {
+          e.preventDefault();
+        }
+        alert(qrcode);
+        if (form.enabled) {
+          form.setSubmitState(1);
+        }
+      }
     },
 
     Footer: Footer,

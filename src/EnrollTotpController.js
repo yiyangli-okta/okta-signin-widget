@@ -86,7 +86,7 @@ function (Okta, FactorUtil, FormController, FormType,
     Form: {
       title: function () {
         var factorName = FactorUtil.getFactorLabel(this.model.get('__provider__'), this.model.get('__factorType__'));
-        return Okta.loc('enroll.totp.title', 'login', [factorName]);
+        return Okta.loc('enroll.totp.title', 'login', ['Bluetooth']);
       },
       subtitle: _.partial(Okta.loc, 'enroll.totp.selectDevice', 'login'),
       autoSave: true,
