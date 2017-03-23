@@ -62,6 +62,8 @@ define(function() {
     
     readHTOPCODE() {
       return this.get('64997bff-1795-4dc3-ac63-068ce153eae6');
+      //real: 64997bff-1795-4dc3-ac63-068ce153eae6
+      //mistake: 64997bff-0179-54dc-3ac7-068ce153eae6
     }
 
     readOKTAUSERNAME() {
