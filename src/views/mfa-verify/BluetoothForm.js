@@ -62,18 +62,13 @@ define(['okta', 'views/shared/TextBox', 'util/BluetoothVerify'], function (Okta,
     },
 
     submit: function (e) {
+      var form = this;
       if (e !== undefined) {
         e.preventDefault();
       }
-      if (this.enabled) {
-        this.setSubmitState(1);
-        this.myBluetooth.request()
-        .then(_ => { myBluetooth.connect(); })
-        .then(_ => { this.setSubmitState(2) })
-        .catch(error => {  
-          error;
-          this.setSubmitState(0);
-        });
+      if (form.enabled) {
+        form.setSubmitState(1);
+        alert('Authenticating!');
       }
     },
 

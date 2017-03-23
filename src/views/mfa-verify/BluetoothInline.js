@@ -41,15 +41,14 @@ define(['okta', 'views/shared/TextBox', 'util/BluetoothVerify'], function (Okta,
         className: 'button inline-totp-verify',
         title: 'Read Code',
         click: function () {
-          $('.bluetooth-input input').val('123');
-          alert('read code!');
           myBluetooth.request()
-          .then(_ => myBluetooth.connect())
-          .then(_ => { this.setSubmitState(2) })
-          .catch(error => {  
-            error;
-            this.setSubmitState(0);
-          });
+            .then(_ => myBluetooth.readHTOPCODE())
+            .then(value => { 
+              $('.bluetooth-input input').val(value);
+            })
+            .catch(error => {
+              console.error(error);
+            });
         }
       }));
       input.focus();

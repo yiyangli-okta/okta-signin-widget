@@ -14,6 +14,8 @@
 
 define(function() {
 
+  var UUID = '64990000-1795-4dc3-ac63-068ce153eae6';
+
   return class {
 
     constructor() {
@@ -24,9 +26,9 @@ define(function() {
     request() {
       let options = {
         "filters": [{
-          "services": ["6499e02d-1795-4dc3-ac63-068ce153eae6"]
+          "services": [UUID]
         }],
-        "optionalServices": ["6499e02d-1795-4dc3-ac63-068ce153eae6"]
+        "optionalServices": [UUID]
       };
     
       return navigator.bluetooth.requestDevice(options)
@@ -37,36 +39,41 @@ define(function() {
       });
     }
   
-    connect() {
+    get(key) {
       if (!this.device) {
         return Promise.reject('Device is not connected.');
       } else {
-        return this.device.gatt.connect();
+        return this.device.gatt.connect()
+                .then(server => {
+                  return server.getPrimaryService(UUID);
+                })
+                .then(service => {
+                  return service.getCharacteristic(key);
+                })
+                .then(characteristic => {
+                  return characteristic.readValue();
+                })
+                .then(value => {
+                  let d = new TextDecoder('utf-8');
+                  return Promise.resolve(d.decode(value));
+                });
       }
     }
     
     readHTOPCODE() {
-      return this.device.gatt.getPrimaryService("6499e02d-1795-4dc3-ac63-068ce153eae6")
-      .then(service => service.getCharacteristic("64997bff-1795-4dc3-ac63-068ce153eae6"))
-      .then(characteristic => characteristic.readValue());
+      return this.get('64997bff-1795-4dc3-ac63-068ce153eae6');
     }
 
     readOKTAUSERNAME() {
-      return this.device.gatt.getPrimaryService("6499e02d-1795-4dc3-ac63-068ce153eae6")
-      .then(service => service.getCharacteristic("64998561-1795-4dc3-ac63-068ce153eae6"))
-      .then(characteristic => characteristic.readValue());
+      return this.get('64998561-1795-4dc3-ac63-068ce153eae6');
     }
 
     readOKTAVERIFYVERSION() {
-      return this.device.gatt.getPrimaryService("6499e02d-1795-4dc3-ac63-068ce153eae6")
-      .then(service => service.getCharacteristic("649954aa-1795-4dc3-ac63-068ce153eae6"))
-      .then(characteristic => characteristic.readValue());
+      return this.get('649954aa-1795-4dc3-ac63-068ce153eae6');
     }
 
     readFACTORID() {
-      return this.device.gatt.getPrimaryService("6499e02d-1795-4dc3-ac63-068ce153eae6")
-      .then(service => service.getCharacteristic("64998caf-1795-4dc3-ac63-068ce153eae6"))
-      .then(characteristic => characteristic.readValue());
+      return this.get('64998caf-1795-4dc3-ac63-068ce153eae6');
     }
 
     disconnect() {
