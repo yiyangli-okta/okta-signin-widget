@@ -69,7 +69,7 @@ define(['okta', 'util/CookieUtil', 'util/BluetoothVerify'], function (Okta, Cook
       var button = this.$el.find('.button');
       this.enabled = ableToSubmit === 0;
       if (ableToSubmit === 0) {
-        button.removeClass('link-button-disabled');
+        button.addClass('link-button-disabled');
         button.prop('value', 'Refresh and Try again!');
       }
       if (ableToSubmit === 1) {

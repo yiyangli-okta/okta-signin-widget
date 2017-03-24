@@ -99,7 +99,10 @@ function (Okta, FactorUtil, FormController, Footer, BluetoothVerify) {
         if (form.enabled) {
           form.setSubmitState(1);
           form.myBluetooth.requestRegister()
-            .then(_ => form.myBluetooth.writeREGISTRATIONURI(qrcode, promise))
+            .then(_ => {
+              form.setSubmitState(2);
+              return form.myBluetooth.writeREGISTRATIONURI(qrcode, promise);
+            })
             .catch(error => {
               console.error(error);
               form.setSubmitState(0);
