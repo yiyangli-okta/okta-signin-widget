@@ -103,8 +103,7 @@ function (Okta, FormController, Enums, RouterUtil, Toolbar, FactorList,
         case Enums.HAS_REQUIRED_ALL_REQUIRED_ENROLLED:
         case Enums.ALL_OPTIONAL_SOME_ENROLLED:
         case Enums.ALL_OPTIONAL_NONE_ENROLLED:
-          var enrolled = factors.where({ enrolled: true }),
-              notEnrolled = factors.where({ enrolled: false });
+          var enrolled = factors.where({ enrolled: true });
           if (enrolled.length > 0) {
             this.add(new FactorList({
               listTitle: Okta.loc('enroll.choices.list.enrolled', 'login'),

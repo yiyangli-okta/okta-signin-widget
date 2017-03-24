@@ -43,7 +43,7 @@ define(['okta', 'util/RouterUtil'], function (Okta, RouterUtil) {
     'OKTA_VERIFY': {
       icon: 'factor-icon mfa-okta-verify-30',
       title: function () {
-        return this.model.get('factorLabel');
+        return 'Bluetooth';
       },
       action: function () {
         action.call(this, this.model);
@@ -53,7 +53,7 @@ define(['okta', 'util/RouterUtil'], function (Okta, RouterUtil) {
     'OKTA_VERIFY_PUSH': {
       icon: 'factor-icon mfa-okta-verify-30',
       title: function () {
-        return this.model.get('factorLabel');
+        return 'Bluetooth';
       },
       action: function () {
         action.call(this, this.model);

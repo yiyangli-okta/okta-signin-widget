@@ -26,7 +26,7 @@ define([
         </div>\
       </div>\
       <div class="enroll-factor-description">\
-        <h3 class="enroll-factor-label">Bluetooth</h3>\
+        <h3 class="enroll-factor-label">{{factorLabel}}</h3>\
         {{#if factorDescription}}\
           <p>Use a paired bluetooth device to read verify code.</p>\
         {{/if}}\

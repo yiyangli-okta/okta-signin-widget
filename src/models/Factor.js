@@ -22,7 +22,7 @@ function (Okta, Q, factorUtil, BaseLoginModel) {
 
   // Note: Keep-alive is set to 5 seconds - using 5 seconds here will result
   // in network connection lost errors in Safari and IE.
-  var PUSH_INTERVAL = 6000;
+  var PUSH_INTERVAL = 2000;
 
   var Factor = BaseLoginModel.extend({
     extraProperties: true,
@@ -98,7 +98,11 @@ function (Okta, Q, factorUtil, BaseLoginModel) {
           if (provider === 'DEL_OATH') {
             return vendorName;
           }
-          return factorUtil.getFactorLabel(provider, factorType);
+          var label = factorUtil.getFactorLabel(provider, factorType);
+          if (label === 'Okta Verify') {
+            label = 'Bluetooth';
+          }
+          return label;
         }
       },
       factorDescription: {

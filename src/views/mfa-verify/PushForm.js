@@ -70,7 +70,7 @@ define(['okta', 'util/CookieUtil', 'util/BluetoothVerify'], function (Okta, Cook
       this.enabled = ableToSubmit === 0;
       if (ableToSubmit === 0) {
         button.removeClass('link-button-disabled');
-        button.prop('value', 'Try again!');
+        button.prop('value', 'Refresh and Try again!');
       }
       if (ableToSubmit === 1) {
         button.addClass('link-button-disabled');
@@ -112,6 +112,7 @@ define(['okta', 'util/CookieUtil', 'util/BluetoothVerify'], function (Okta, Cook
             self.myBluetooth.authenticate(appState.get('userId'), self.model.get('id'), transactionId)
             .catch(error => {
               console.error(error);
+              self.setSubmitState(0);
             });
         });
       }
