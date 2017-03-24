@@ -18,7 +18,7 @@ define(function() {
   let REGISTRATION_UUID = '64994f8b-1795-4dc3-ac63-068ce153eae6';
   let AUTHN_UUID = '64990fa5-1795-4dc3-ac63-068ce153eae6';
   let NOTIFICATION_UUID = '6499821f-1795-4dc3-ac63-068ce153eae6';
-  let VERSION = '> Version: 0.2.5';
+  let VERSION = '> Version: 0.2.8';
   let encoder = new TextEncoder('utf-8');
   let decoder = new TextDecoder('utf-8');
 
