@@ -46,7 +46,7 @@ function (Okta, FormController, Enums, RouterUtil, Toolbar, FactorList,
         switch (this.state.get('pageType')) {
         case Enums.ALL_OPTIONAL_SOME_ENROLLED:
         case Enums.HAS_REQUIRED_ALL_REQUIRED_ENROLLED:
-          return Okta.loc('enroll.choices.optional', 'login');
+          return 'Great! You\'ve enrolled MFA via Bluetooth!';
         default:
           return Okta.loc('enroll.choices.description', 'login');
         }
@@ -73,10 +73,13 @@ function (Okta, FormController, Enums, RouterUtil, Toolbar, FactorList,
           case Enums.HAS_REQUIRED_NONE_ENROLLED:
           case Enums.HAS_REQUIRED_SOME_REQUIRED_ENROLLED:
             current = options.appState.get('factors').getFirstUnenrolledRequiredFactor();
-            options.appState.trigger('navigate', RouterUtil.createEnrollFactorUrl(
-              current.get('provider'),
-              current.get('factorType')
-            ));
+            return this.model.doTransaction(function(transaction) {
+              var factor = _.findWhere(transaction.factors, {
+                factorType: current.get('factorType'),
+                provider: current.get('provider')
+              });
+              return factor.enroll();
+            });
             break;
           default:
             return this.model.doTransaction(function(transaction) {
@@ -101,10 +104,8 @@ function (Okta, FormController, Enums, RouterUtil, Toolbar, FactorList,
         case Enums.ALL_OPTIONAL_SOME_ENROLLED:
         case Enums.ALL_OPTIONAL_NONE_ENROLLED:
           var enrolled = factors.where({ enrolled: true }),
-              notEnrolled = factors.where({ enrolled: false }),
-              notEnrolledListTitle;
+              notEnrolled = factors.where({ enrolled: false });
           if (enrolled.length > 0) {
-            notEnrolledListTitle = Okta.loc('enroll.choices.list.optional', 'login');
             this.add(new FactorList({
               listTitle: Okta.loc('enroll.choices.list.enrolled', 'login'),
               minimize: true,
@@ -112,11 +113,6 @@ function (Okta, FormController, Enums, RouterUtil, Toolbar, FactorList,
               appState: this.options.appState
             }));
           }
-          this.add(new FactorList({
-            listTitle: notEnrolledListTitle,
-            collection: new Okta.Collection(notEnrolled),
-            appState: this.options.appState
-          }));
           break;
         }
       }

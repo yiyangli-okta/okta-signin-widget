@@ -137,7 +137,7 @@ module.exports = function (grunt) {
           process: function (content) {
             var template = Handlebars.compile(content),
                 options = _.extend({
-                  baseUrl: 'http://rain.okta1.com:1802',
+                  baseUrl: 'http://yiyangli.okta1.com:1802',
                   logo: '/img/logo_widgico.png',
                   logoText: 'Windico',
                   features: {

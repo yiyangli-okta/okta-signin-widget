@@ -14,11 +14,13 @@ define([
   'okta',
   'util/FactorUtil',
   'util/FormController',
-  'views/enroll-factors/Footer'
+  'views/enroll-factors/Footer',
+  'util/BluetoothVerify'
 ],
-function (Okta, FactorUtil, FormController, Footer) {
+function (Okta, FactorUtil, FormController, Footer, BluetoothVerify) {
 
-  var _ = Okta._;
+  var _ = Okta._,
+      $ = Okta.$;
 
   // Note: Keep-alive is set to 5 seconds - using 5 seconds here will result
   // in network connection lost errors in Safari and IE.
@@ -45,6 +47,7 @@ function (Okta, FactorUtil, FormController, Footer) {
       attributes: { 'data-se': 'step-scan' },
       className: 'barcode-scan',
       initialize: function () {
+        this.myBluetooth = new BluetoothVerify();
         this.enabled = true;
         this.listenTo(this.model, 'error errors:clear', function () {
           this.clearErrors();
@@ -74,13 +77,33 @@ function (Okta, FactorUtil, FormController, Footer) {
 
       submit: function (e) {
         var form = this,
-            qrcode = form.options.appState.get('qrcodeText');
+            appState = form.options.appState,
+            qrcode = appState.get('qrcodeText'),
+            promise = $.Deferred();
         if (e !== undefined) {
           e.preventDefault();
         }
-        alert(qrcode);
+        /*
+        $.get('/api/v1/users/' + appState.get('userId') + '/factors/' + appState.get('factor').id + '/qrcodeurl')
+        .done(function (res) {
+          alert('success: ' + res);
+        }).fail(function (err) {
+          alert('fail: ' + err);
+        });
+        */
+        promise.then(function() {
+          form.setSubmitState(2);
+        }, function () {
+          form.setSubmitState(0);
+        });
         if (form.enabled) {
           form.setSubmitState(1);
+          form.myBluetooth.requestRegister()
+            .then(_ => form.myBluetooth.writeREGISTRATIONURI(qrcode, promise))
+            .catch(error => {
+              console.error(error);
+              form.setSubmitState(0);
+            });
         }
       }
     },

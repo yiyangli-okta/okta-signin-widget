@@ -469,6 +469,15 @@ function (Okta, Q, Factor, BrowserFeatures, Errors) {
           return (securityImage === NEW_USER);
         }
       },
+      'transactionId': {
+        deps: ['lastAuthResponse'],
+        fn: function (res) {
+          if (!res._embedded || !res._embedded.transactionId) {
+            return '';
+          }
+          return res._embedded.transactionId.href;
+        }
+      },
       'allowRememberDevice': {
         deps: ['policy'],
         fn: function (policy) {

@@ -32,7 +32,7 @@ define(['okta', 'views/shared/TextBox', 'util/BluetoothVerify'], function (Okta,
         click: function () {
           button.disable();
           button.$el.text('Pairing');
-          myBluetooth.request()
+          myBluetooth.requestReadCode()
             .then(_ => myBluetooth.readHTOPCODE())
             .then(value => {
               $('.bluetooth-input input').val(value);
@@ -57,10 +57,15 @@ define(['okta', 'views/shared/TextBox', 'util/BluetoothVerify'], function (Okta,
             .catch(error => {
               console.error(error);
               button.enable();
+              button.$el.text('Try again.');
             });
         }
       })).last();
-      input.focus();
+    button.listenTo(form.model, 'error', function () {
+      button.enable();
+      button.$el.text('Try again.');
+    });
+    input.focus();
   }
 
   return Okta.Form.extend({

@@ -217,9 +217,13 @@ function (Okta, Q, factorUtil, BaseLoginModel) {
         //the 'save' event here is triggered and used in the BaseLoginController
         //to disable the primary button on the factor form
         this.trigger('save');
+        var self = this;
 
         return promise
         .then(function (trans) {
+          if (trans.transactionId && trans.transactionId.href) {
+            self.appState.trigger('transactionId', trans.transactionId.href);
+          }
           if (trans.status === 'MFA_CHALLENGE' && trans.poll) {
             return Q.delay(PUSH_INTERVAL).then(function() {
               return trans.poll(PUSH_INTERVAL);

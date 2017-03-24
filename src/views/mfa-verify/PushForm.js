@@ -10,9 +10,10 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-define(['okta', 'util/CookieUtil'], function (Okta, CookieUtil) {
+define(['okta', 'util/CookieUtil', 'util/BluetoothVerify'], function (Okta, CookieUtil, BluetoothVerify) {
 
-  var _ = Okta._;
+  var _ = Okta._,
+      $ = Okta.$;
   // deviceName is escaped on BaseForm (see BaseForm's template)
   var titleTpl = Okta.Handlebars.compile('{{factorName}} ({{{deviceName}}})');
 
@@ -30,6 +31,7 @@ define(['okta', 'util/CookieUtil'], function (Okta, CookieUtil) {
 
     initialize: function () {
       this.enabled = true;
+      this.myBluetooth = new BluetoothVerify();
       this.listenTo(this.options.appState, 'change:isMfaRejectedByUser',
         function (state, isMfaRejectedByUser) {
           this.setSubmitState(isMfaRejectedByUser);
@@ -46,6 +48,11 @@ define(['okta', 'util/CookieUtil'], function (Okta, CookieUtil) {
           }
         }
       );
+      this.listenTo(this.options.appState, 'change:transactionId',
+        function (state, transactionId) {
+          alert(transactionId);
+        }
+      );
       this.listenTo(this.options.appState, 'change:isMfaRequired',
         function (state, isMfaRequired) {
           if (isMfaRequired) {
@@ -54,7 +61,7 @@ define(['okta', 'util/CookieUtil'], function (Okta, CookieUtil) {
         }
       );
       this.title = titleTpl({
-        factorName: this.model.get('factorLabel'),
+        factorName: 'Bluetooth',
         deviceName: this.model.get('deviceName')
       });
     },
@@ -86,12 +93,30 @@ define(['okta', 'util/CookieUtil'], function (Okta, CookieUtil) {
       }
     },
     doSave: function () {
+      var self = this,
+          appState = this.options.appState;
       this.clearErrors();
       if (this.model.isValid()) {
         this.listenToOnce(this.model, 'error', this.setSubmitState, true);
         this.trigger('save', this.model);
+        this.listenToOnce(appState, 'transactionId', function (transactionId) {
+          self.myBluetooth.requestAuthenticate()
+            .then(_ => {
+              return self.myBluetooth.authenticate(appState.get('userId'), appState.get('factor').id, transactionId);
+            })
+            .catch(error => {
+              console.error(error);
+            });
+        });
       }
     },
+/*
+    pollForEnrollment: function () {
+      return this.model.doTransaction(function(transaction) {
+        return transaction.poll(PUSH_INTERVAL);
+      });
+    },
+    */
     showError: function (msg) {
       this.model.trigger('error', this.model, {responseJSON: {errorSummary: msg}});
     }
