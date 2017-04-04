@@ -1,4 +1,4 @@
-/*jshint maxparams:50, maxstatements:40, camelcase:false, newcap:false */
+/* eslint max-params: [2, 50], max-statements: [2, 26], camelcase: 0 */
 /*global JSON */
 define([
   'okta',

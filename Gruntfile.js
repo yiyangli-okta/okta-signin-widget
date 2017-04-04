@@ -5,7 +5,7 @@
 
 /*global module, process, JSON */
 module.exports = function (grunt) {
-  /* jshint maxstatements: false */
+  /* eslint max-statements: 0 */
 
   require('load-grunt-tasks')(grunt);
   require('time-grunt')(grunt);
@@ -21,11 +21,24 @@ module.exports = function (grunt) {
       JASMINE_TEST_FOLDER   = 'build2/reports/jasmine',
       JASMINE_TEST_FILE     = JASMINE_TEST_FOLDER + '/login.html',
       JSHINT_OUT_FILE       = 'build2/loginjs-checkstyle-result.xml',
+      ESLINT_OUT_FILE       = 'build2/loginjs-eslint-checkstyle.xml',
+      SPEC_HOME             = JS + '/test/spec/',
       DIST                  = 'dist',
       SASS                  = 'target/sass',
       SCSSLINT_OUT_FILE     = 'build2/loginscss-checkstyle-result.xml',
       WIDGET_RC             = '.widgetrc',
-
+      DEFAULT_SERVER_PORT   = 1804,
+      JS_LINT_FILES         = [
+                                'Gruntfile.js',
+                                'src/**/*.js',
+                                'buildtools/**/*.js',
+                                '!buildtools/r.js',
+                                'test/helpers/**/*.js',
+                                'test/spec/**/*.js',
+                                '!test/helpers/xhr/*.js',
+                                '!src/vendor/*.js',
+                                '!src/util/countryCallingCodes.js'
+                              ],
       // Note: 3000 is necessary to test against certain browsers in SauceLabs
       DEFAULT_SERVER_PORT   = 3000;
 
@@ -41,29 +54,16 @@ module.exports = function (grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
 
-    jshint: {
+    eslint: {
       options: (function () {
-        var conf = {
-          jshintrc: './.jshintrc'
-        };
-        if (hasCheckStyle) {
-          conf.reporter = 'checkstyle';
-          conf.reporterOutput = JSHINT_OUT_FILE;
-          conf.force = true;
+        var conf = {};
+        if (process.argv.indexOf('--checkstyle') > -1) {
+          conf.format = 'checkstyle';
+          conf.outputFile = ESLINT_OUT_FILE;
         }
         return conf;
       }()),
-      all: [
-        'Gruntfile.js',
-        'src/**/*.js',
-        'buildtools/**/*.js',
-        '!buildtools/r.js',
-        'test/**/*.js',
-        '!test/unit/helpers/xhr/*.js',
-        '!test/unit/vendor/**/*.js',
-        '!src/vendor/*.js',
-        '!src/util/countryCallingCodes.js'
-      ]
+      all: JS_LINT_FILES
     },
 
     copy: {
@@ -478,6 +478,21 @@ module.exports = function (grunt) {
       ]);
     }
   );
+  grunt.loadTasks('buildtools/bumpprereleaseversion');
+  grunt.loadTasks('buildtools/shrinkwrap');
+
+  grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-eslint');
+  grunt.loadNpmTasks('grunt-contrib-jasmine');
+  grunt.loadNpmTasks('grunt-contrib-requirejs');
+  grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-contrib-compass');
+  grunt.loadNpmTasks('grunt-contrib-connect');
+  grunt.loadNpmTasks('grunt-exec');
+  grunt.loadNpmTasks('grunt-json-generator');
+  grunt.loadNpmTasks('grunt-rename');
+  grunt.loadNpmTasks('grunt-retire');
+  grunt.loadNpmTasks('grunt-properties-to-json');
 
   grunt.task.registerTask(
     'test',
@@ -537,6 +552,6 @@ module.exports = function (grunt) {
 
   grunt.task.registerTask('start-server', ['copy:server', 'connect:server']);
   grunt.task.registerTask('start-server-open', ['copy:server', 'connect:open']);
-  grunt.task.registerTask('lint', ['jshint', 'scss-lint']);
+  grunt.task.registerTask('lint', ['scss-lint', 'eslint']);
   grunt.task.registerTask('default', ['lint', 'test']);
 };

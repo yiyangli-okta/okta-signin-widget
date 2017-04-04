@@ -1,4 +1,4 @@
-/* jshint maxparams:25, newcap:false */
+/* eslint max-params: [2, 25] */
 define([
   'vendor/lib/q',
   'okta/underscore',
@@ -13,7 +13,7 @@ define([
   'helpers/xhr/security_image',
   'sandbox'
 ],
-function (Q, _, $, OktaAuth, Util, Beacon, FormView, Expect,
+function (q, _, $, OktaAuth, Util, Beacon, FormView, Expect,
           Router, resEnroll, resSecurityImage, $sandbox) {
 
   var itp = Expect.itp;
@@ -37,7 +37,7 @@ function (Q, _, $, OktaAuth, Util, Beacon, FormView, Expect,
     Util.registerRouter(router);
     Util.mockRouterNavigate(router);
     Util.mockJqueryCss();
-    return Q({
+    return q({
       router: router,
       beacon: beacon,
       form: form,

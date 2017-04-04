@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-/*jshint maxcomplexity:13, maxparams:11 */
+/* eslint complexity: [2, 13] */
 define([
   'okta',
   'shared/views/forms/inputs/CheckBox',

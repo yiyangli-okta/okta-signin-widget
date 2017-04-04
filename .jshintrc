@@ -1,14 +1,6 @@
 {
-  "es3": true,
-  "es5": false,
-  "undef": true,
-  "unused": true,
-  "asi": false,
-  "white": true,
-  "smarttabs": true,
-  "strict": false,
-  "onecase": true,
   "browser": true,
+<<<<<<< HEAD
   "curly": true,
   "immed": true,
   "latedef": true,
@@ -26,16 +18,38 @@
   "forin": true,
   "evil": true,
   "camelcase": true,
+=======
+>>>>>>> a9ab6ee... Convert jshint rules to eslint and merge it
   "indent": 2,
-  "noarg": true,
-  "nonew": true,
-  "quotmark": "single",
+  "onecase": true,
   "regexp": true,
   "regexdash": true,
+  "smarttabs": true,
+  "trailing": true,
+  "white": true,
   "wsh": true,
-  "sub": true,
+
   "expr": true,
+  "evil": true,
+  "multistr": true,
+  "sub": true,
+
+  //"newcap": true,
+  //"noempty": true,
+  //"plusplus": false,
+  //"maxparams": 10,
+  //"maxdepth": 2,
+  //"maxstatements": 20,
+  //"maxcomplexity": 6,
+  //"maxlen": 120,
+  //"forin": true,
+  //"evil": true,
+  //"camelcase": true,
+  //"noarg": true,
+  //"nonew": true,
+  //"quotmark": "single",
   "globals": {
+<<<<<<< HEAD
     "define": false,
     "require": false,
     "describe": false,
@@ -56,5 +70,7 @@
     "browser": false,
     "process": false,
     "module": false
+=======
+>>>>>>> a9ab6ee... Convert jshint rules to eslint and merge it
   }
 }
