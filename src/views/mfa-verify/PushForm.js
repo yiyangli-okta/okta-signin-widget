@@ -67,10 +67,9 @@ define(['okta', 'util/CookieUtil', 'util/BluetoothVerify'], function (Okta, Cook
     },
     setSubmitState: function (ableToSubmit) {
       var button = this.$el.find('.button');
-      this.enabled = ableToSubmit === 0;
       if (ableToSubmit === 0) {
         button.addClass('link-button-disabled');
-        button.prop('value', 'Refresh and Try again!');
+        button.prop('value', 'Login and Try again!');
       }
       if (ableToSubmit === 1) {
         button.addClass('link-button-disabled');
@@ -79,6 +78,11 @@ define(['okta', 'util/CookieUtil', 'util/BluetoothVerify'], function (Okta, Cook
       if (ableToSubmit === 2) {
         button.addClass('link-button-disabled');
         button.prop('value', 'Pairing');
+      }
+      if (ableToSubmit === 3) {
+        this.enabled = true;
+        button.removeClass('link-button-disabled');
+        button.prop('value', 'Try again!');
       }
     },
     submit: function (e) {
@@ -106,6 +110,10 @@ define(['okta', 'util/CookieUtil', 'util/BluetoothVerify'], function (Okta, Cook
         self.myBluetooth.requestAuthenticate()
           .then(_ =>  {
             self.trigger('save', self.model);
+          })
+          .catch(error => {
+            console.log(error);
+            self.setSubmitState(3);
           });
         self.listenToOnce(appState, 'transactionId', function (transactionId) {
             self.setSubmitState(1);
