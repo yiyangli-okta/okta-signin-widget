@@ -9,8 +9,8 @@
  *
  * See the License for the specific language governing permissions and limitations under the License.
  */
-
-define(['okta', 'vendor/lib/q', 'views/shared/TextBox'], function (Okta, Q, TextBox) {
+/* eslint complexity: [2, 7] */
+define(['okta', 'vendor/lib/q', 'views/shared/TextBox'], function (Okta, q, TextBox) {
 
   var subtitleTpl = Okta.Handlebars.compile('({{phoneNumber}})');
   var _ = Okta._;
@@ -69,7 +69,7 @@ define(['okta', 'vendor/lib/q', 'views/shared/TextBox'], function (Okta, Q, Text
             this.render();
             // render and focus on the passcode input field.
             self.getInputs().first().render().focus();
-            return Q.delay(API_RATE_LIMIT);
+            return q.delay(API_RATE_LIMIT);
           }, this))
           .then(_.bind(function () {
             this.options.title = formRetry;

@@ -12,13 +12,13 @@
 
 /* globals JSON */
 define([
-    'okta',
-    'vendor/lib/q'
-  ],
-function (Okta, Q) {
+  'okta',
+  'vendor/lib/q'
+],
+function (Okta, q) {
 
   function adaptToOkta(promise) {
-    return new Q(promise);
+    return q(promise);
   }
 
   function makeCredential(accountInfo, cryptoParams, challenge) {

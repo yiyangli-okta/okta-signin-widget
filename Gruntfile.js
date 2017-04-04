@@ -20,16 +20,12 @@ module.exports = function (grunt) {
   var JS                    = 'target/js',
       JASMINE_TEST_FOLDER   = 'build2/reports/jasmine',
       JASMINE_TEST_FILE     = JASMINE_TEST_FOLDER + '/login.html',
-      JSHINT_OUT_FILE       = 'build2/loginjs-checkstyle-result.xml',
       ESLINT_OUT_FILE       = 'build2/loginjs-eslint-checkstyle.xml',
-      SPEC_HOME             = JS + '/test/spec/',
       DIST                  = 'dist',
       SASS                  = 'target/sass',
       SCSSLINT_OUT_FILE     = 'build2/loginscss-checkstyle-result.xml',
       WIDGET_RC             = '.widgetrc',
-      DEFAULT_SERVER_PORT   = 1804,
-      JS_LINT_FILES         = [
-                                'Gruntfile.js',
+      JS_LINT_FILES         = ['Gruntfile.js',
                                 'src/**/*.js',
                                 'buildtools/**/*.js',
                                 '!buildtools/r.js',
@@ -481,7 +477,6 @@ module.exports = function (grunt) {
   grunt.loadTasks('buildtools/bumpprereleaseversion');
   grunt.loadTasks('buildtools/shrinkwrap');
 
-  grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-eslint');
   grunt.loadNpmTasks('grunt-contrib-jasmine');
   grunt.loadNpmTasks('grunt-contrib-requirejs');

@@ -10,7 +10,6 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-/*jshint newcap:false */
 /*global JSON */
 
 define([
@@ -22,7 +21,7 @@ define([
   'util/Logger',
   'json!config/config',
   'util/BrowserFeatures'
-], function (_, Q, $, login, country, Logger, config, BrowserFeatures) {
+], function (_, q, $, login, country, Logger, config, BrowserFeatures) {
 
   var STORAGE_KEY = 'osw.languages';
 
@@ -158,7 +157,7 @@ define([
     // 2. If the language is not in our config file, it means that they've
     //    probably defined it on their own.
     if (language === 'en' || !_.contains(config.supportedLanguages, language)) {
-      return Q({});
+      return q({});
     }
 
     //local storage does not work correctly with android web views (embeded browers)
@@ -167,11 +166,11 @@ define([
     if (localStorageIsSupported) {
       var cached = getCachedLanguages();
       if (cached[language]) {
-        return Q(cached[language]);
+        return q(cached[language]);
       }
     }
 
-    return Q.all([
+    return q.all([
       fetchJsonp('login', language, assets),
       fetchJsonp('country', language, assets)
     ])

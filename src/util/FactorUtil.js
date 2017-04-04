@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-/* eslint complexity: [2, 10], max-statements: [2, 18] */
+/* eslint complexity: [2, 14], max-statements: [2, 26] */
 define(['okta'], function (Okta) {
 
   var _ = Okta._;

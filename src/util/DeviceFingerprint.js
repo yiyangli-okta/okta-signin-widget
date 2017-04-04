@@ -10,14 +10,14 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-/*jshint latedef:false */
 /*global JSON */
+/* eslint complexity: [2, 7] */
 
-define(['vendor/lib/q', 'okta/jquery'], function (Q, $) {
+define(['vendor/lib/q', 'okta/jquery'], function (q, $) {
 
   return {
     generateDeviceFingerprint: function (oktaDomainUrl, element) {
-      var deferred = Q.defer();
+      var deferred = q.defer();
 
       // Create iframe
       var $iframe = $('<iframe>', {

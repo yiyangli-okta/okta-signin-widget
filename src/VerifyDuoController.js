@@ -81,12 +81,8 @@ function (Okta, Duo, q, FactorUtil, FormController, Enums, FormType, FooterSigno
         // jquery decides the Content-Type instead of it being a JSON type). Enroll/Verify DUO
         // are the only two places where we actually do this.
         // NOTE - If we ever decide to change this, we should test this very carefully.
-<<<<<<< HEAD
         var rememberDevice = this.get('rememberDevice');
-        return Q($.post(url, data))
-=======
         return q($.post(url, data))
->>>>>>> a9ab6ee... Convert jshint rules to eslint and merge it
         .then(function () {
           return self.doTransaction(function(transaction) {
             var data;

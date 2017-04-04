@@ -1,4 +1,4 @@
-/*global JSON */
+/*global JSON, module */
 module.exports = function (grunt) {
 
   function generateConfig() {
