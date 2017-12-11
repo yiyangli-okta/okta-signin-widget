@@ -17,6 +17,7 @@ var config  = require('./webpack.common.config');
 
 // 1. entryConfig
 var entryConfig = config('okta-sign-in.entry.js');
+entryConfig.devtool = 'source-map';
 entryConfig.output.filename = 'okta-sign-in.entry.js';
 entryConfig.externals = {
   '@okta/okta-auth-js/jquery': true,
